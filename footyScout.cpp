@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <iomanip> // Library tambahan untuk merapikan spasi tabel (setw)
+#include <iomanip> 
 
 using namespace std;
 
@@ -17,11 +17,7 @@ struct Pemain {
 const int MAKS_PEMAIN = 100;
 const string namaFile = "database_pemain.txt";
 
-// ==========================================
-// BAB 2: FILE I/O (Database Handler)
-// ==========================================
-// [SUDAH SELESAI] Fungsi dari Milestone 1 kalian
-int loadDataDariFile(Pemain db[], string namaFile) {
+int loadDataDariFile(Pemain db[]) {
     ifstream file(namaFile);
     int jumlah = 0;
     if (!file.is_open()) return 0;
@@ -37,7 +33,7 @@ int loadDataDariFile(Pemain db[], string namaFile) {
     return jumlah;
 }
 
-// TODO (Untuk Anggota 1): Buat fungsi untuk menyimpan kembali data dari Array ke File .txt     ME
+// fungsi untuk menyimpan kembali data dari Array ke File .txt
 void simpanDataKeFile(Pemain db[], int totalPemain) {
     ofstream file(namaFile, ios::trunc);
     
@@ -53,9 +49,8 @@ void simpanDataKeFile(Pemain db[], int totalPemain) {
 }
 
 // ==========================================
-// BAB 3: ARRAY & TAMPILAN
+// ARRAY & TAMPILAN
 // ==========================================
-// Tampilan sudah diperbarui dengan iomanip agar berbentuk tabel rapi
 void tampilkanSemuaPemain(Pemain db[], int totalPemain) {
     cout << "\n=== DATABASE SCOUTING PEMAIN (" << totalPemain << " Pemain) ===\n";
     cout << left << setw(5) << "ID" << setw(20) << "NAMA" << setw(6) << "UMUR" 
@@ -72,7 +67,7 @@ void tampilkanSemuaPemain(Pemain db[], int totalPemain) {
     cout << "==================================================\n";
 }
 
-// TODO (Untuk Anggota 1): Fungsi untuk input data pemain baru      
+//Fungsi untuk input data pemain baru      
 void tambahPemain(Pemain db[], int &totalPemain) {
     if (totalPemain >= MAKS_PEMAIN) {
         cout << "[ERROR] Database pemain penuh!" << endl;
@@ -129,12 +124,11 @@ void tambahPemain(Pemain db[], int &totalPemain) {
 
     cout << "\n[SUKSES] Data pemain berhasil ditambahkan!" << endl;
 }
-}
+
 
 // ==========================================
-// BAB 4 & 5: SEARCHING & SORTING
-// ==========================================
-// TODO (Untuk Anggota 2): Implementasi Searching      
+// Implementasi Searching
+// ==========================================   
 void tampilDataCari(Pemain p) {
     cout << "\n=== DATA PEMAIN ===" << endl;
     cout << "ID       : " << p.id << endl;
@@ -236,7 +230,7 @@ void cariPemain(Pemain db[], int totalPemain) {
         string posisiCari;
         bool ketemu = false;
 
-        cout << "Masukkan posisi pemain (GK/DF/MF/FW): ";
+        cout << "Masukkan posisi pemain : ";
         cin >> posisiCari;
 
         cout << "\n=== HASIL PENCARIAN POSISI " << posisiCari << " ===" << endl;
@@ -282,11 +276,10 @@ void cariPemain(Pemain db[], int totalPemain) {
     }
 }
 
-// TODO (Untuk Anggota 2): Implementasi Sorting     
+// ==========================================
+//                  SORTING
+// ==========================================
 void urutkanPemain(Pemain db[], int totalPemain) {
-    // 1. Gunakan algoritma Bubble Sort atau Selection Sort
-    // 2. Tukar posisi struct pemain di dalam array berdasarkan atribut 'overall' tertinggi (Descending)
-    // 3. Panggil fungsi tampilkanSemuaPemain() setelah selesai disortir
 	if (totalPemain == 0){
 		cout << "[ERROR] Belum ada data pemain yang dapat diurutkan! " << endl;
 		return;
@@ -299,11 +292,9 @@ void urutkanPemain(Pemain db[], int totalPemain) {
 				Pemain temp = db[j];
 				db[j] = db[j + 1];
 				db[j + 1] = temp;
-				
 				}
 			}
 		}
-
 		simpanDataKeFile(db, totalPemain);
 		cout << "Data sudah diurutkan! " << endl;
 		tampilkanSemuaPemain(db, totalPemain);
@@ -323,29 +314,95 @@ void bandingkanPemain(Pemain *p1, Pemain *p2) {
 }
 
 // ==========================================
-// BAB 7: FUNGSI REKURSIF (Prediksi Potensi)
-// ==========================================
-// TODO (Untuk Anggota 2/3): Fungsi memanggil dirinya sendiri       
+// FUNGSI REKURSIF (Prediksi Potensi)
+// ==========================================    
 double prediksiPotensi(double ratingSaatIni, int umurSaatIni, int sisaTahun) {
-    // 1. Buat Base Case (kondisi berhenti saat sisaTahun == 0)
-    // 2. Buat aturan tier pertumbuhan (umur < 22 tambah 3, umur > 30 kurang 1)
-    // 3. Return pemanggilan fungsi ini kembali (Recursive Step)
-    return ratingSaatIni; // Ini nilai sementara agar tidak error
+    if (sisaTahun == 0) {
+        return ratingSaatIni;
+    }
+
+    if (umurSaatIni < 22) {
+        ratingSaatIni += 3;
+    }
+    else if (umurSaatIni <= 30) {
+        ratingSaatIni += 1;
+    }
+    else {
+        ratingSaatIni -= 1;
+    }
+
+    return prediksiPotensi(
+        ratingSaatIni,
+        umurSaatIni + 1,
+        sisaTahun - 1
+    );
+
 }
 
-// ==========================================
-// FUNGSI UTAMA (MAIN PROGRAM)
-// ==========================================
+void bantuPrediksi(Pemain db[], int totalData){
+    if (totalData == 0) {
+        cout << "[ERROR] Data pemain kosong!\n";
+        return;
+    }
+
+    int idCari;
+    cout << "\n=== SIMULASI POTENSI PEMAIN ===\n";
+    cout << "Masukkan ID pemain: ";
+    cin >> idCari;
+
+    urutID(db, totalData);
+
+    int index = cariID(db, totalData, idCari);
+
+    if (index == -1) {
+        cout << "Pemain tidak ditemukan!\n";
+    }
+    else {
+        int tahun;
+
+        cout << "\nNama Pemain : " << db[index].nama << endl;
+        cout << "Usia Saat Ini : " << db[index].usia << endl;
+        cout << "OVR Saat Ini  : " << db[index].overall << endl;
+
+        cout << "\nPrediksi berapa tahun ke depan? ";
+        cin >> tahun;
+
+        double hasil = prediksiPotensi(
+            db[index].overall,
+            db[index].usia,
+            tahun
+        );
+
+        cout << "\n===== HASIL SIMULASI =====\n";
+        cout << "Nama Pemain          : "
+             << db[index].nama << endl;
+
+        cout << "OVR Saat Ini         : "
+             << db[index].overall << endl;
+
+        cout << "Usia Saat Ini        : "
+             << db[index].usia << endl;
+
+        cout << "Usia Setelah Simulasi: "
+             << db[index].usia + tahun << endl;
+
+        cout << "Prediksi OVR         : "
+             << hasil << endl;
+
+        cout << "===========================\n";
+    }
+}
+
+
+
 int main() {
     Pemain databasePemain[MAKS_PEMAIN];
     
     
-    // Tahap 1: Load Data
-    int totalData = loadDataDariFile(databasePemain, namaFile);
-    if (totalData == 0) return 1; // Keluar jika gagal load
+    int totalData = loadDataDariFile(databasePemain);
+    if (totalData == 0) return 1; 
 
     int pilihan;
-    // Tahap 2: Menu Interaktif
     do {
         cout << "\n===================================";
         cout << "\n       FOOTYSCOUT PRO SYSTEM       ";
@@ -381,8 +438,7 @@ int main() {
                 bandingkanPemain(&databasePemain[0], &databasePemain[1]);
                 break;
             case 6:
-                // Contoh pemanggilan rekursif (nantinya terapkan ke pemain yang dipilih)
-                cout << "\n>> [Sistem]: Fitur Simulasi Potensi belum diimplementasikan.\n";
+                bantuPrediksi(databasePemain, totalData);
                 break;
             case 7:
                 simpanDataKeFile(databasePemain, totalData);
