@@ -5,9 +5,6 @@
 
 using namespace std;
 
-// ==========================================
-// BAB 1: STRUCT (Blueprint Data Pemain)
-// ==========================================
 struct Pemain {
     int id;
     string nama;
@@ -39,13 +36,19 @@ int loadDataDariFile(Pemain db[], string namaFile) {
     return jumlah;
 }
 
-// TODO (Untuk Anggota 1): Buat fungsi untuk menyimpan kembali data dari Array ke File .txt
+// TODO (Untuk Anggota 1): Buat fungsi untuk menyimpan kembali data dari Array ke File .txt     ME
 void simpanDataKeFile(Pemain db[], int totalPemain, string namaFile) {
-    // 1. Buka file dengan ofstream (Output File Stream)
-    // 2. Lakukan perulangan for (0 sampai totalPemain)
-    // 3. Tulis data db[i] ke dalam file dengan format persis seperti file asli
-    // 4. Tutup file
-    cout << ">> [Sistem]: Fitur Save File belum diimplementasikan.\n";
+    ofstream file(namaFile, ios::trunc);
+    
+    if (!file.is_open())
+    {
+        cout << "Sistem Error]: Gagal membuka file untuk menyimpan data!\n";
+        return;
+    }   
+    for(int i = 0; i < totalPemain; i++){
+        file << db[i].id << " " << db[i].nama << " " << db[i].usia << " " << db[i].posisi << " " << db[i].stats[0] << " " << db[i].stats[1] << " " << db[i].stats[2] << " " << db[i].stats[3] << " " << db[i].stats[4] << " " << db[i].stats[5] << " " << db[i].overall << endl;
+    }
+    file.close();
 }
 
 // ==========================================
@@ -68,7 +71,7 @@ void tampilkanSemuaPemain(Pemain db[], int totalPemain) {
     cout << "==================================================\n";
 }
 
-// TODO (Untuk Anggota 1): Fungsi untuk input data pemain baru
+// TODO (Untuk Anggota 1): Fungsi untuk input data pemain baru      
 void tambahPemain(Pemain db[], int &totalPemain) {
     // 1. Minta user memasukkan data (cin)
     // 2. Simpan di index db[totalPemain]
@@ -79,7 +82,7 @@ void tambahPemain(Pemain db[], int &totalPemain) {
 // ==========================================
 // BAB 4 & 5: SEARCHING & SORTING
 // ==========================================
-// TODO (Untuk Anggota 2): Implementasi Searching
+// TODO (Untuk Anggota 2): Implementasi Searching      
 void cariPemain(Pemain db[], int totalPemain) {
     // 1. Minta input user (Cari berdasarkan Nama atau ID?)
     // 2. Lakukan Linear Search atau Binary Search
@@ -87,7 +90,7 @@ void cariPemain(Pemain db[], int totalPemain) {
     cout << ">> [Sistem]: Fitur Cari Pemain belum diimplementasikan.\n";
 }
 
-// TODO (Untuk Anggota 2): Implementasi Sorting
+// TODO (Untuk Anggota 2): Implementasi Sorting     
 void urutkanPemain(Pemain db[], int totalPemain) {
     // 1. Gunakan algoritma Bubble Sort atau Selection Sort
     // 2. Tukar posisi struct pemain di dalam array berdasarkan atribut 'overall' tertinggi (Descending)
@@ -98,7 +101,7 @@ void urutkanPemain(Pemain db[], int totalPemain) {
 // ==========================================
 // BAB 6: POINTER (Bandingkan 2 Pemain)
 // ==========================================
-// TODO (Untuk Anggota 3): Pass-by-reference dengan pointer
+// TODO (Untuk Anggota 3): Pass-by-reference dengan pointer   
 void bandingkanPemain(Pemain *p1, Pemain *p2) {
     // Fungsi ini menerima ALAMAT memori dari dua pemain (bukan copy data)
     // 1. Tampilkan nama p1 dan p2
@@ -109,7 +112,7 @@ void bandingkanPemain(Pemain *p1, Pemain *p2) {
 // ==========================================
 // BAB 7: FUNGSI REKURSIF (Prediksi Potensi)
 // ==========================================
-// TODO (Untuk Anggota 2/3): Fungsi memanggil dirinya sendiri
+// TODO (Untuk Anggota 2/3): Fungsi memanggil dirinya sendiri       
 double prediksiPotensi(double ratingSaatIni, int umurSaatIni, int sisaTahun) {
     // 1. Buat Base Case (kondisi berhenti saat sisaTahun == 0)
     // 2. Buat aturan tier pertumbuhan (umur < 22 tambah 3, umur > 30 kurang 1)
