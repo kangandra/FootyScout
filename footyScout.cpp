@@ -15,6 +15,7 @@ struct Pemain {
 };
 
 const int MAKS_PEMAIN = 100;
+const string namaFile = "database_pemain.txt";
 
 // ==========================================
 // BAB 2: FILE I/O (Database Handler)
@@ -37,7 +38,7 @@ int loadDataDariFile(Pemain db[], string namaFile) {
 }
 
 // TODO (Untuk Anggota 1): Buat fungsi untuk menyimpan kembali data dari Array ke File .txt     ME
-void simpanDataKeFile(Pemain db[], int totalPemain, string namaFile) {
+void simpanDataKeFile(Pemain db[], int totalPemain) {
     ofstream file(namaFile, ios::trunc);
     
     if (!file.is_open())
@@ -95,7 +96,28 @@ void urutkanPemain(Pemain db[], int totalPemain) {
     // 1. Gunakan algoritma Bubble Sort atau Selection Sort
     // 2. Tukar posisi struct pemain di dalam array berdasarkan atribut 'overall' tertinggi (Descending)
     // 3. Panggil fungsi tampilkanSemuaPemain() setelah selesai disortir
-    cout << ">> [Sistem]: Fitur Sorting belum diimplementasikan.\n";
+	if (totalPemain == 0){
+		cout << "[ERROR] Belum ada data pemain yang dapat diurutkan! " << endl;
+		return;
+	}
+
+	for (int i = 0; i < totalPemain - 1; i++){
+		for (int j = 0; j < totalPemain - i - 1; j++){
+
+			if(db[j].overall > db[j + 1].overall){
+				Pemain temp = db[j];
+				db[j] = db[j + 1];
+				db[j + 1] = temp;
+				
+				}
+			}
+		}
+
+		simpanDataKeFile(db, totalPemain);
+		cout << "Data sudah diurutkan! " << endl;
+		tampilkanSemuaPemain(db, totalPemain);
+    
+    
 }
 
 // ==========================================
@@ -125,7 +147,7 @@ double prediksiPotensi(double ratingSaatIni, int umurSaatIni, int sisaTahun) {
 // ==========================================
 int main() {
     Pemain databasePemain[MAKS_PEMAIN];
-    string namaFile = "database_pemain.txt";
+    
     
     // Tahap 1: Load Data
     int totalData = loadDataDariFile(databasePemain, namaFile);
@@ -172,7 +194,7 @@ int main() {
                 cout << "\n>> [Sistem]: Fitur Simulasi Potensi belum diimplementasikan.\n";
                 break;
             case 7:
-                simpanDataKeFile(databasePemain, totalData, namaFile);
+                simpanDataKeFile(databasePemain, totalData);
                 cout << "Data tersimpan. Keluar dari program...\n";
                 break;
             default:
