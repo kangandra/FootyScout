@@ -84,11 +84,151 @@ void tambahPemain(Pemain db[], int &totalPemain) {
 // BAB 4 & 5: SEARCHING & SORTING
 // ==========================================
 // TODO (Untuk Anggota 2): Implementasi Searching      
+void tampilDataCari(Pemain p) {
+    cout << "\n=== DATA PEMAIN ===" << endl;
+    cout << "ID       : " << p.id << endl;
+    cout << "Nama     : " << p.nama << endl;
+    cout << "Usia     : " << p.usia << endl;
+    cout << "Posisi   : " << p.posisi << endl;
+    cout << "Pace     : " << p.stats[0] << endl;
+    cout << "Shooting : " << p.stats[1] << endl;
+    cout << "Passing  : " << p.stats[2] << endl;
+    cout << "Dribbling: " << p.stats[3] << endl;
+    cout << "Defending: " << p.stats[4] << endl;
+    cout << "Physical : " << p.stats[5] << endl;
+    cout << "Overall  : " << p.overall << endl;
+}
+
+void urutID(Pemain db[], int totalPemain) {
+    for (int i = 0; i < totalPemain - 1; i++) {
+        for (int j = 0; j < totalPemain - i - 1; j++) {
+            if (db[j].id > db[j + 1].id) {
+                Pemain temp = db[j];
+                db[j] = db[j + 1];
+                db[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int cariID(Pemain db[], int totalPemain, int idCari) {
+    int kiri = 0;
+    int kanan = totalPemain - 1;
+
+    while (kiri <= kanan) {
+        int tengah = (kiri + kanan) / 2;
+
+        if (db[tengah].id == idCari) {
+            return tengah;
+        } else if (idCari < db[tengah].id) {
+            kanan = tengah - 1;
+        } else {
+            kiri = tengah + 1;
+        }
+    }
+
+    return -1;
+}
+
 void cariPemain(Pemain db[], int totalPemain) {
-    // 1. Minta input user (Cari berdasarkan Nama atau ID?)
-    // 2. Lakukan Linear Search atau Binary Search
-    // 3. Tampilkan data pemain jika ketemu, jika tidak tampilkan error
-    cout << ">> [Sistem]: Fitur Cari Pemain belum diimplementasikan.\n";
+    int pilih;
+
+    if (totalPemain == 0) {
+        cout << "[ERROR] Data pemain masih kosong!" << endl;
+        return;
+    }
+
+    cout << "\n=== CARI PEMAIN ===" << endl;
+    cout << "1. Cari berdasarkan ID" << endl;
+    cout << "2. Cari berdasarkan nama" << endl;
+    cout << "3. Cari berdasarkan posisi" << endl;
+    cout << "4. Cari Pace minimal" << endl;
+    cout << "Pilih: ";
+    cin >> pilih;
+
+    if (pilih == 1) {
+        int idCari;
+
+        urutID(db, totalPemain);
+
+        cout << "Masukkan ID pemain: ";
+        cin >> idCari;
+
+        int hasil = cariID(db, totalPemain, idCari);
+
+        if (hasil != -1) {
+            tampilDataCari(db[hasil]);
+        } else {
+            cout << "Pemain dengan ID tersebut tidak ditemukan." << endl;
+        }
+
+    } else if (pilih == 2) {
+        string namaCari;
+        bool ketemu = false;
+
+        cout << "Masukkan nama pemain: ";
+        cin.ignore();
+        getline(cin, namaCari);
+
+        for (int i = 0; i < totalPemain; i++) {
+            if (db[i].nama == namaCari) {
+                tampilDataCari(db[i]);
+                ketemu = true;
+            }
+        }
+
+        if (!ketemu) {
+            cout << "Pemain dengan nama tersebut tidak ditemukan." << endl;
+        }
+
+    } else if (pilih == 3) {
+        string posisiCari;
+        bool ketemu = false;
+
+        cout << "Masukkan posisi pemain (GK/DF/MF/FW): ";
+        cin >> posisiCari;
+
+        cout << "\n=== HASIL PENCARIAN POSISI " << posisiCari << " ===" << endl;
+
+        for (int i = 0; i < totalPemain; i++) {
+            if (db[i].posisi == posisiCari) {
+                cout << db[i].id << " - " << db[i].nama
+                     << " | Posisi: " << db[i].posisi
+                     << " | Overall: " << db[i].overall << endl;
+                ketemu = true;
+            }
+        }
+
+        if (!ketemu) {
+            cout << "Tidak ada pemain dengan posisi tersebut." << endl;
+        }
+
+    } else if (pilih == 4) {
+        int batasPace;
+        bool ketemu = false;
+
+        cout << "Masukkan minimal Pace: ";
+        cin >> batasPace;
+
+        cout << "\n=== HASIL PENCARIAN PACE >= " << batasPace << " ===" << endl;
+
+        for (int i = 0; i < totalPemain; i++) {
+            if (db[i].stats[0] >= batasPace) {
+                cout << db[i].id << " - " << db[i].nama
+                     << " | Posisi: " << db[i].posisi
+                     << " | Pace: " << db[i].stats[0]
+                     << " | Overall: " << db[i].overall << endl;
+                ketemu = true;
+            }
+        }
+
+        if (!ketemu) {
+            cout << "Tidak ada pemain yang sesuai kriteria." << endl;
+        }
+
+    } else {
+        cout << "Pilihan tidak valid." << endl;
+    }
 }
 
 // TODO (Untuk Anggota 2): Implementasi Sorting     
