@@ -74,10 +74,61 @@ void tampilkanSemuaPemain(Pemain db[], int totalPemain) {
 
 // TODO (Untuk Anggota 1): Fungsi untuk input data pemain baru      
 void tambahPemain(Pemain db[], int &totalPemain) {
-    // 1. Minta user memasukkan data (cin)
-    // 2. Simpan di index db[totalPemain]
-    // 3. Jangan lupa tambahkan totalPemain++
-    cout << ">> [Sistem]: Fitur Tambah Pemain belum diimplementasikan.\n";
+    if (totalPemain >= MAKS_PEMAIN) {
+        cout << "[ERROR] Database pemain penuh!" << endl;
+        return;
+    }
+
+    cout << "\n=== TAMBAH PEMAIN BARU ===" << endl;
+
+    cout << "Masukkan ID Pemain      : ";
+    cin >> db[totalPemain].id;
+
+    cin.ignore();
+
+    cout << "Masukkan Nama Pemain    : ";
+    getline(cin, db[totalPemain].nama);
+
+    cout << "Masukkan Usia Pemain    : ";
+    cin >> db[totalPemain].usia;
+
+    cout << "Masukkan Posisi (GK/DF/MF/FW): ";
+    cin >> db[totalPemain].posisi;
+
+    cout << "\nMasukkan Statistik Pemain" << endl;
+
+    cout << "Pace      : ";
+    cin >> db[totalPemain].stats[0];
+
+    cout << "Shooting  : ";
+    cin >> db[totalPemain].stats[1];
+
+    cout << "Passing   : ";
+    cin >> db[totalPemain].stats[2];
+
+    cout << "Dribbling : ";
+    cin >> db[totalPemain].stats[3];
+
+    cout << "Defending : ";
+    cin >> db[totalPemain].stats[4];
+
+    cout << "Physical  : ";
+    cin >> db[totalPemain].stats[5];
+
+    db[totalPemain].overall =
+        (db[totalPemain].stats[0] +
+         db[totalPemain].stats[1] +
+         db[totalPemain].stats[2] +
+         db[totalPemain].stats[3] +
+         db[totalPemain].stats[4] +
+         db[totalPemain].stats[5]) / 6;
+
+    totalPemain++;
+
+    simpanDataKeFile(db, totalPemain);
+
+    cout << "\n[SUKSES] Data pemain berhasil ditambahkan!" << endl;
+}
 }
 
 // ==========================================
