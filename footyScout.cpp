@@ -307,10 +307,24 @@ void urutkanPemain(Pemain db[], int totalPemain) {
 // ==========================================
 // TODO (Untuk Anggota 3): Pass-by-reference dengan pointer   
 void bandingkanPemain(Pemain *p1, Pemain *p2) {
-    // Fungsi ini menerima ALAMAT memori dari dua pemain (bukan copy data)
-    // 1. Tampilkan nama p1 dan p2
-    // 2. Bandingkan siapa OVR yang lebih tinggi
-    cout << ">> [Sistem]: Fitur Bandingkan Pemain (Pointer) belum diimplementasikan.\n";
+    cout << "\n==================================================\n";
+    cout << "     PERBANDINGAN PEMAIN (ANALISIS POINTER)       \n";
+    cout << "==================================================\n";
+    
+    cout << left << setw(18) << "Atribut" 
+         << setw(16) << p1->nama 
+         << setw(16) << p2->nama << "\n";
+    cout << "--------------------------------------------------\n";
+    cout << left << setw(18) << "Usia" 
+         << setw(16) << p1->usia 
+         << setw(16) << p2->usia << "\n";
+    cout << left << setw(18) << "Posisi" 
+         << setw(16) << p1->posisi 
+         << setw(16) << p2->posisi << "\n";
+    cout << left << setw(18) << "Overall (OVR)" 
+         << setw(16) << p1->overall 
+         << setw(16) << p2->overall << "\n";
+    cout << "--------------------------------------------------\n";
 }
 
 // ==========================================
@@ -398,7 +412,7 @@ void bantuPrediksi(Pemain db[], int totalData){
 int main() {
     Pemain databasePemain[MAKS_PEMAIN];
     
-    
+    bandingkanPemain(&databasePemain[0], &databasePemain[1]);
     int totalData = loadDataDariFile(databasePemain);
     if (totalData == 0) return 1; 
 
@@ -429,14 +443,40 @@ int main() {
             case 3:
                 cariPemain(databasePemain, totalData);
                 break;
-            case 4:
+            case 4:bandingkanPemain(&databasePemain[0], &databasePemain[1]);
                 urutkanPemain(databasePemain, totalData);
                 break;
-            case 5:
-                // Contoh hardcode pemanggilan pointer (nantinya minta input ID dari user)
-                // &databasePemain[0] artinya kita mengirim alamat memori dari index ke-0
-                bandingkanPemain(&databasePemain[0], &databasePemain[1]);
+            case 5:{
+                int id1, id2;
+                cout << "\n--- MENU PERBANDINGAN PEMAIN ---\n";
+                cout << "Masukkkan ID pemain pertama : "; cin >> id1;
+                cout << "Masukkkan ID pemain kedua : "; cin >> id2;
+
+                Pemain *ptrPemain1 = nullptr;
+                Pemain *ptrPemain2 = nullptr;
+
+                for (int i = 0; i < totalData; i++)
+                {
+                    if (databasePemain[i].id == id1)
+                    {
+                        ptrPemain1 = &databasePemain[i];
+                    }
+                    if (databasePemain[i].id == id2)
+                    {
+                        ptrPemain2 = &databasePemain[i];
+                    }
+                }
+                if (ptrPemain1 != nullptr && ptrPemain2 != nullptr)
+                {
+                    bandingkanPemain (ptrPemain1, ptrPemain2);
+                }else{
+                    cout << "\n>> Proses gagal. Pastikan kedua ID pemain terdaftar di database!\n";
+                }
+                
+                cin.ignore(); 
+                cin.get();
                 break;
+            }
             case 6:
                 bantuPrediksi(databasePemain, totalData);
                 break;
