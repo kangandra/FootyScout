@@ -65,6 +65,7 @@ void tampilkanSemuaPemain(Pemain db[], int totalPemain) {
              << setw(5) << db[i].overall << "\n";
     }
     cout << "==================================================\n";
+    system("pause");
 }
 
 //Fungsi untuk input data pemain baru      
@@ -123,6 +124,7 @@ void tambahPemain(Pemain db[], int &totalPemain) {
     simpanDataKeFile(db, totalPemain);
 
     cout << "\n[SUKSES] Data pemain berhasil ditambahkan!" << endl;
+    system("pause");
 }
 
 
@@ -274,6 +276,7 @@ void cariPemain(Pemain db[], int totalPemain) {
     } else {
         cout << "Pilihan tidak valid." << endl;
     }
+    system("pause");
 }
 
 // ==========================================
@@ -405,6 +408,7 @@ void bantuPrediksi(Pemain db[], int totalData){
 
         cout << "===========================\n";
     }
+    system("pause");
 }
 
 
@@ -418,6 +422,7 @@ int main() {
 
     int pilihan;
     do {
+		system("cls");
         cout << "\n===================================";
         cout << "\n       FOOTYSCOUT PRO SYSTEM       ";
         cout << "\n===================================\n";
