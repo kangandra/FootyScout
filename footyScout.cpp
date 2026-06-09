@@ -87,7 +87,7 @@ void tambahPemain(Pemain db[], int &totalPemain) {
     cout << "Masukkan Usia Pemain    : ";
     cin >> db[totalPemain].usia;
 
-    cout << "Masukkan Posisi (GK/DF/MF/FW): ";
+    cout << "Masukkan Posisi : ";
     cin >> db[totalPemain].posisi;
 
     cout << "\nMasukkan Statistik Pemain" << endl;
@@ -125,6 +125,46 @@ void tambahPemain(Pemain db[], int &totalPemain) {
     cout << "\n[SUKSES] Data pemain berhasil ditambahkan!" << endl;
 }
 
+// ==========================================
+// EDIT & HAPUS DATA PEMAIN (CRUD)
+// ==========================================
+
+
+void hapusPemain(Pemain db[], int &totalPemain) {
+    if (totalPemain == 0) {
+        cout << "[ERROR] Database pemain masih kosong!" << endl;
+        return;
+    }
+
+    int idHapus;
+    cout << "\n=== HAPUS DATA PEMAIN ===" << endl;
+    cout << "Masukkan ID Pemain yang ingin dihapus: ";
+    cin >> idHapus;
+
+    int index = -1;
+    for (int i = 0; i < totalPemain; i++) {
+        if (db[i].id == idHapus) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        string namaTerhapus = db[index].nama;
+
+        // Logika Array Shifting: Menggeser sisa data ke kiri untuk menimpa data yang dihapus
+        for (int i = index; i < totalPemain - 1; i++) {
+            db[i] = db[i + 1];
+        }
+        
+        totalPemain--; 
+
+        simpanDataKeFile(db, totalPemain);
+        cout << "\n[SUKSES] Data pemain " << namaTerhapus << " berhasil dihapus permanen!" << endl;
+    } else {
+        cout << "[ERROR] Pemain dengan ID " << idHapus << " tidak ditemukan!" << endl;
+    }
+}
 
 // ==========================================
 // Implementasi Searching
@@ -285,8 +325,17 @@ void urutkanPemain(Pemain db[], int totalPemain) {
 		return;
 	}
 
-	for (int i = 0; i < totalPemain - 1; i++){
-		for (int j = 0; j < totalPemain - i - 1; j++){
+    int subPilihan;
+    cout << "\n--- MENU SORTING DATA ---\n";
+    cout << "1. Urutkan berdasarkan Overall (OVR) - Tertinggi ke Terendah\n";
+    cout << "2. Urutkan berdasarkan ID Pemain - Terkecil ke Terbesar\n";
+    cout << "3. Batal / Kembali ke Menu Utama\n";
+    cout << "Pilih opsi (1-3): ";
+    cin >> subPilihan;
+
+    if (subPilihan == 1){
+        for (int i = 0; i < totalPemain - 1; i++){
+		    for (int j = 0; j < totalPemain - i - 1; j++){
 
 			if(db[j].overall > db[j + 1].overall){
 				Pemain temp = db[j];
@@ -296,11 +345,24 @@ void urutkanPemain(Pemain db[], int totalPemain) {
 			}
 		}
 		simpanDataKeFile(db, totalPemain);
-		cout << "Data sudah diurutkan! " << endl;
+		cout << "Data sudah diurutkan berdasarkan OVR! " << endl;
 		tampilkanSemuaPemain(db, totalPemain);
-    
-    
+    }else if (subPilihan == 2) {
+        // Sorting ID (Ascending) dengan memanggil fungsi urutID yang sudah ada
+        urutID(db, totalPemain);
+        simpanDataKeFile(db, totalPemain);
+        cout << "\n[SUKSES] Data sudah diurutkan berdasarkan ID Pemain!\n";
+        tampilkanSemuaPemain(db, totalPemain);
+
+    } else if (subPilihan == 3) {
+        cout << ">> Membatalkan tindakan, kembali ke menu utama...\n";
+
+    } else {
+        cout << ">> [ERROR] Pilihan sub-menu tidak valid!\n";
+    }
 }
+    
+    
 
 // ==========================================
 // BAB 6: POINTER (Bandingkan 2 Pemain)
@@ -422,9 +484,9 @@ int main() {
         cout << "\n       FOOTYSCOUT PRO SYSTEM       ";
         cout << "\n===================================\n";
         cout << "1. Lihat Semua Pemain\n";
-        cout << "2. Tambah Pemain Baru\n";
+        cout << "2. Manajemen pemain (hapus/tambah)\n";
         cout << "3. Cari Pemain (Searching)\n";
-        cout << "4. Leaderboard OVR (Sorting)\n";
+        cout << "4. Leaderboard OVR/ID (Sorting)\n";
         cout << "5. Bandingkan 2 Pemain (Pointer)\n";
         cout << "6. Simulasi Potensi (Rekursif)\n";
         cout << "7. Save & Exit\n";
@@ -438,12 +500,28 @@ int main() {
 				cin.get();    
                 break;
             case 2:
-                tambahPemain(databasePemain, totalData);
+                int subPilihan;
+                cout << "\n--- MANAJEMEN PEMAIN ---\n";
+                cout << "1. Tambah Pemain Baru\n";
+                cout << "2. Hapus Data Pemain\n";
+                cout << "3. Batal / Kembali ke Menu Utama\n";
+                cout << "Pilih opsi (1-3): ";
+                cin >> subPilihan;
+
+                if (subPilihan == 1) {
+                    tambahPemain(databasePemain, totalData);
+                } else if (subPilihan == 2) {
+                    hapusPemain(databasePemain, totalData);
+                } else if (subPilihan == 3) {
+                    cout << ">> Membatalkan tindakan, kembali ke menu utama...\n";
+                } else {
+                    cout << ">> [Error] Pilihan sub-menu tidak valid!\n";
+                }
                 break;
             case 3:
                 cariPemain(databasePemain, totalData);
                 break;
-            case 4:bandingkanPemain(&databasePemain[0], &databasePemain[1]);
+            case 4:
                 urutkanPemain(databasePemain, totalData);
                 break;
             case 5:{
